@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- EDIT: Page title and description (shown in Google results). Keep "South Jersey" and "concrete" in both for local SEO. -->
+  <title>JLP Concrete | South Jersey Concrete Contractors: Foundations, Basements, Driveways &amp; Slabs</title>
+  <meta name="description" content="JLP Concrete: South Jersey concrete contractors for residential and commercial foundations, footings, basements, driveways and slabs. Serving South Jersey for 10 years.">
+
+  <!--
+    FONTS: Archivo Black (headings) and Archivo (body) from Google Fonts. They match the
+    heavy, wide sans-serif in the logo. This is the only external request on the page.
+    To go fully offline, delete these three lines; the page falls back to Arial Black / Arial.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&display=swap">
+
+  <style>
+    /* ==========================================================
+       1. DESIGN TOKENS
+       Change colors, fonts and spacing here; they update the
+       whole page. Hex codes can be swapped for your brand colors.
+       ========================================================== */
+    :root {
+      --bg:        #f1f2f0;   /* page background (soft concrete gray-white) */
+      --surface:   #ffffff;   /* cards and form fields */
+      --slab:      #dfe1de;   /* light gray blocks / placeholders */
+      --slab-dark: #b8bfcc;   /* placeholder borders (cool gray) */
+      /* Colors taken from the logo: deep navy (#0f172a) and white.
+         Eyedrop your logo file and replace --navy if the match is off. */
+      --navy:      #0f172a;   /* logo navy: the single brand color */
+      --blueprint: #0f2d59;   /* blueprint paper blue: hero + empty photo frames (try #1a365d for lighter) */
+      --ink:       #0f172a;   /* main text */
+      --ink-soft:  #4a5568;   /* secondary text (navy-tinted gray) */
+      --accent:    #0f172a;   /* buttons, section headings, links */
+      --accent-dk: #26375d;   /* hover state: a lighter navy */
+      --line:      #0f172a;   /* the heavy outline used on all boxes */
+
+      /* Heavy geometric sans like the logo letters (JLP / CONCRETE) */
+      --font-display: "Archivo Black", "Arial Black", "Helvetica Neue", Arial, sans-serif;
+      --font:         "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --max:  1120px;         /* maximum content width */
+      --gap:  24px;           /* standard space between boxes */
+    }
+
+    /* ==========================================================
+       2. BASE / RESET
+       ========================================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;      /* smooth anchor scrolling */
+      scroll-padding-top: 160px;     /* keeps headings clear of the sticky header */
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--ink);
+      background: var(--bg);
+    }
+
+    /* Archivo Black has one weight, so headings use font-weight 400 to avoid fake bold */
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.01em; }
+    h1 { font-size: clamp(2.1rem, 5.2vw, 3.6rem); }
+    h2 { font-size: clamp(1.6rem, 3.2vw, 2.2rem); color: var(--accent); }
+    h3 { font-size: 1.15rem; }
+    p  { margin: 0 0 16px; max-width: 68ch; }
+    a  { color: var(--accent); }
+
+    /* Visible keyboard focus for accessibility */
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+    /* Respect visitors who turn off motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    /* ==========================================================
+       3. LAYOUT HELPERS
+       ========================================================== */
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+    section { padding: 72px 0; }
+    .section-intro { color: var(--ink-soft); margin-bottom: 32px; }
+
+    /* ==========================================================
+       4. IMAGE PLACEHOLDERS
+       Each placeholder has a fixed aspect-ratio so you can see
+       what size photo to use. To add a real photo, replace the
+       whole <div class="ph"> with:
+       <img src="your-photo.jpg" alt="Describe the photo" class="photo">
+       ========================================================== */
+    .ph {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px;
+      background: var(--slab);
+      border: 2px dashed var(--slab-dark);
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      font-weight: 600;
+      width: 100%;
+    }
+    .ph-4x3  { aspect-ratio: 4 / 3; }
+    .ph-16x9 { aspect-ratio: 16 / 9; }
+    .photo   { display: block; width: 100%; height: auto; object-fit: cover; }
+
+    /* ==========================================================
+       5. HEADER / NAVIGATION
+       ========================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--surface);
+      border-bottom: 3px solid var(--line);
+      /* Smooth slide when the header hides or returns (controlled by the script at the bottom of the page) */
+      transition: transform 0.3s ease-in-out;
+    }
+    /* Added by the script when scrolling down: slides the whole header up out of view */
+    .site-header.is-hidden { transform: translateY(-100%); }
+    /* Visitors who prefer no motion get an instant change instead of a slide */
+    @media (prefers-reduced-motion: reduce) {
+      .site-header { transition: none; }
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 148px;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+    /* ============================================================
+       === EDIT LOGO SIZE HERE ===
+       To make the logo bigger or smaller on computers, change the
+       number on the "height: 128px;" line just below (try 100 to 160).
+       The width follows automatically, so the logo never stretches.
+       The phone size is a separate number: search this file for
+       "EDIT LOGO SIZE ON PHONES".
+       No max-height or max-width limits are set on the logo.
+       ============================================================ */
+
+    /* The logo is a square with its own navy background, so it reads as a badge. */
+    .logo { display: block; line-height: 0; }
+    .logo img {
+      display: block;
+      height: 128px;   /* <-- CHANGE THIS NUMBER to resize the logo (desktop) */
+      width: auto;
+    }
+    .nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
+    .nav ul a { color: var(--ink); text-decoration: none; font-weight: 600; padding: 6px 0; border-bottom: 3px solid transparent; }
+    .nav ul a:hover { border-bottom-color: var(--accent); }
+
+    /* ==========================================================
+       6. HERO
+       Architectural blueprint background: deep blue paper with
+       thin white drafting-grid lines, drawn entirely in CSS.
+       To use a real photo instead, replace the background-image and
+       background-size lines in .hero with:
+       background-image: url("hero.jpg"); background-size: cover;
+       ========================================================== */
+    .hero {
+      padding: 0;
+      /* Blueprint paper: deep blue base (color set by --blueprint at the top of this file) */
+      background-color: var(--blueprint);
+      /* Drafting grid, drawn with thin translucent white lines.
+         The first two layers are the large squares, the last two are the fine sub-grid. */
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;   /* big square, then fine square */
+      border-bottom: 3px solid var(--line);
+    }
+    .hero .wrap { padding-top: 88px; padding-bottom: 88px; }
+    .hero-box {
+      max-width: 680px;
+      background: var(--surface);
+      border: 3px solid var(--line);
+      padding: 40px;
+      /* Soft shadow lifts the white panel off the blueprint */
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.3);
+    }
+    .hero-box p { font-size: 1.15rem; color: var(--ink-soft); }
+    .hero-note { font-size: 0.85rem; margin-top: 12px; color: var(--ink-soft); }
+
+    /* ==========================================================
+       7. BUTTONS
+       ========================================================== */
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: var(--accent);
+      color: #fff;
+      font: inherit;
+      font-family: var(--font-display);
+      font-weight: 400;
+      text-decoration: none;
+      border: 2px solid var(--line);
+      cursor: pointer;
+    }
+    .btn:hover { background: var(--accent-dk); }
+
+    /* ==========================================================
+       8. ABOUT
+       ========================================================== */
+    .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
+    .facts { list-style: none; margin: 0; padding: 0; border: 2px solid var(--line); background: var(--surface); }
+    .facts li { padding: 16px 20px; border-bottom: 2px solid var(--line); }
+    .facts li:last-child { border-bottom: 0; }
+    .facts strong { display: block; font-family: var(--font-display); font-weight: 400; font-size: 1.05rem; }
+
+    /* ==========================================================
+       9. SERVICES GRID
+       ========================================================== */
+    #services { background: var(--surface); border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap); }
+    .service { background: var(--bg); border: 2px solid var(--line); padding: 28px; }
+    .service p { margin-bottom: 0; color: var(--ink-soft); }
+
+    /* ==========================================================
+       10. PORTFOLIO (collapsed by default)
+       Uses the built-in <details> tag: no JavaScript needed.
+       To make it open on page load, change <details> to <details open>.
+       ========================================================== */
+    /* Clean white "gallery wall" behind the cards */
+    #portfolio { background: var(--surface); border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); }
+    details.portfolio { border: 3px solid var(--line); background: var(--surface); }
+    details.portfolio summary {
+      cursor: pointer;
+      padding: 20px 24px;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 400;
+      list-style: none;                 /* hides default arrow */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    details.portfolio summary::-webkit-details-marker { display: none; }
+    details.portfolio summary::after { content: "+"; font-size: 1.8rem; color: var(--accent); }
+    details.portfolio[open] summary { border-bottom: 3px solid var(--line); background: var(--slab); }
+    details.portfolio[open] summary::after { content: "\2212"; }   /* minus sign when open */
+    .portfolio-body { padding: 24px; }
+    .project { background: var(--bg); border: 2px solid var(--line); }
+    .project-info { padding: 16px 20px 20px; }
+    .project-info p { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+
+    /* ----------------------------------------------------------
+       PROJECT PHOTO SLIDER (inside each portfolio card)
+       Two images sit side by side inside .slides. The < and >
+       buttons slide the strip left or right. overflow: hidden
+       keeps the hidden image from spilling out of the card.
+       To change the photo shape, edit the aspect-ratio below
+       (4 / 3 = standard landscape, 3 / 2 = wider, 1 / 1 = square).
+       ---------------------------------------------------------- */
+    .slider {
+      position: relative;               /* lets the arrow buttons sit on top */
+      overflow: hidden;                 /* no layout breaking */
+      aspect-ratio: 4 / 3;
+      border-bottom: 2px solid var(--line);
+      /* Blueprint fallback: shows behind each photo while it loads, or if a file is missing */
+      background-color: var(--blueprint);
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 60px 60px, 60px 60px, 12px 12px, 12px 12px;
+    }
+    .slides {
+      display: flex;
+      height: 100%;
+      transition: transform 0.4s ease-in-out;   /* smooth slide between images */
+    }
+    .slide { position: relative; flex: 0 0 100%; height: 100%; }
+    .slide .photo { width: 100%; height: 100%; object-fit: cover; }  /* real photos fill it too */
+
+    /* Small label in the corner of each image (Prep, Finished, etc.) */
+    .slide-tag {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      padding: 6px 12px;
+      background: rgba(15, 23, 42, 0.85);
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+    }
+
+    /* Left and right arrow buttons, floating over the image edges */
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 64px;
+      padding: 0;
+      border: 0;
+      background: rgba(15, 23, 42, 0.65);   /* semi-transparent navy */
+      color: #fff;
+      font-size: 2.2rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .slider-btn:hover { background: rgba(15, 23, 42, 0.9); }
+    .slider-btn.prev { left: 0; }
+    .slider-btn.next { right: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slides { transition: none; }
+    }
+
+    /* ==========================================================
+       11. PARTNERS (horizontal scrolling carousel)
+       The row of company names scrolls left and right. The < and >
+       buttons scroll it, and visitors can also swipe or drag on
+       touch screens and trackpads. The scrollbar is hidden.
+       To add a company, copy one <li class="partner-badge"> line in
+       the HTML below and change the name.
+       ========================================================== */
+    .carousel { display: flex; align-items: stretch; gap: 12px; }
+
+    /* The scrolling row */
+    .partner-track {
+      flex: 1;
+      min-width: 0;                    /* lets the row shrink so it can scroll */
+      display: flex;
+      gap: 16px;
+      margin: 0;
+      padding: 4px 2px;                /* room so outlines are not clipped */
+      list-style: none;
+      white-space: nowrap;             /* keeps each name on one line */
+      overflow-x: auto;
+      scroll-snap-type: x proximity;   /* gently lines cards up after a swipe */
+      scrollbar-width: none;           /* hide scrollbar: Firefox */
+    }
+    .partner-track::-webkit-scrollbar { display: none; }   /* hide scrollbar: Chrome, Safari */
+
+    /* One text-based "logo badge" per company */
+    .partner-badge {
+      flex: 0 0 auto;                  /* never shrink or wrap */
+      display: flex;
+      align-items: center;
+      padding: 28px 32px;
+      background: var(--slab);
+      border: 2px solid var(--line);
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      scroll-snap-align: start;
+    }
+
+    /* The < and > arrow buttons */
+    .carousel-btn {
+      flex: 0 0 auto;
+      width: 48px;
+      background: var(--accent);
+      color: #fff;
+      border: 2px solid var(--line);
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .carousel-btn:hover { background: var(--accent-dk); }
+
+    /* ==========================================================
+       12. CONTACT
+       ========================================================== */
+    #contact { background: var(--ink); color: #fff; }
+    #contact h2 { color: #fff; }
+    #contact .section-intro { color: #c8ced3; }
+    .contact-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; }
+    form { background: var(--surface); color: var(--ink); border: 3px solid var(--bg); padding: 28px; }
+    label { display: block; font-weight: 700; margin-bottom: 6px; }
+    input, textarea {
+      width: 100%;
+      font: inherit;
+      padding: 12px;
+      margin-bottom: 18px;
+      border: 2px solid var(--line);
+      background: var(--bg);
+      color: var(--ink);
+    }
+    textarea { min-height: 130px; resize: vertical; }
+    .contact-info { list-style: none; margin: 0; padding: 0; }
+    .contact-info li { padding: 16px 0; border-bottom: 1px solid #2c3a57; }
+    .contact-info strong { display: block; font-family: var(--font-display); font-weight: 400; color: #b8c4dc; }
+    .contact-info a { color: #fff; }
+
+    /* ==========================================================
+       13. FOOTER
+       ========================================================== */
+    footer { background: var(--surface); border-top: 3px solid var(--line); padding: 28px 0; font-size: 0.9rem; color: var(--ink-soft); }
+    footer p { margin: 0 0 4px; max-width: none; }
+
+    /* ==========================================================
+       14. RESPONSIVE (tablet and phone)
+       ========================================================== */
+    @media (max-width: 860px) {
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      section { padding: 52px 0; }
+      .nav { flex-direction: column; align-items: flex-start; padding-top: 10px; padding-bottom: 10px; gap: 8px; min-height: 0; }
+      /* === EDIT LOGO SIZE ON PHONES: change the number on the next line === */
+      .logo img { height: 96px; }
+      .nav ul { gap: 14px; flex-wrap: wrap; font-size: 0.95rem; }
+      html { scroll-padding-top: 200px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .hero .wrap { padding-top: 48px; padding-bottom: 48px; }
+      .hero-box { padding: 24px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========== NAVIGATION HEADER ========== -->
+  <header class="site-header">
+    <div class="wrap nav">
+      <!--
+        LOGO: save your logo file next to this HTML file as "logo.png" (or change the filename below).
+        Use an image at least 300 x 300 pixels so it stays sharp on high-resolution phone screens.
+        The width and height numbers keep the page from jumping while the image loads.
+      -->
+      <a href="#top" class="logo">
+        <img src="jlpconcrete.png" width="128" height="128" alt="JLP Concrete logo, home">
+      </a>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#partners">Partners</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ========== HERO ========== -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-box">
+          <!-- EDIT: Headline and subtitle -->
+          <h1>South Jersey concrete contractors built to last.</h1>
+          <p>JLP Concrete pours professional concrete foundations, basements, driveways, sidewalks, and footings for South Jersey homes. Specializing in small projects and residential concrete, our tight-knit crew handles everything from individual residential pours to master-planned community developments.</p>
+          <a href="#contact" class="btn">Request a South Jersey concrete estimate</a>
+          <p class="hero-note">Free, no-obligation estimates. We reply within one business day.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ABOUT ========== -->
+    <section id="about">
+      <div class="wrap about-grid">
+        <div>
+          <h2>A Family-Owned South Jersey Team for 10 Years</h2>
+          <!-- EDIT: Adjust the story to match your company -->
+          <p>JLP Concrete is the specialized concrete division of JP Construction &amp; Contractors LLC, owned and operated by Juan Perez Jr. for the past 10 years. We pair dedicated concrete craftsmanship with the trusted structural resources of a full construction company. From Egg Harbor to Glassboro and everywhere in between, we have spent the last decade pouring high-quality residential concrete across South Jersey.</p>
+          <p>What sets us apart is our hands-on leadership. Owner Juan Perez Jr. works directly on-site alongside our lead foreman, Juan Sr., who brings over 25 years of specialized concrete and structural experience to every single job. We have been trusted by premier local builders to lay foundations, cellars, and crawl spaces from start to finish for entire new housing developments. Whether you need a small sidewalk repair or a complete home foundation, our family team ensures your concrete is built to last.</p>
+        </div>
+        <ul class="facts">
+          <!-- EDIT: Swap in your real numbers and credentials -->
+          <li><strong>10 years serving South Jersey</strong>Residential and commercial concrete work</li>
+          <li><strong>25+ years of foreman experience</strong>Hands-on concrete and structural expertise on every job</li>
+          <li><strong>Licensed, bonded and insured:</strong>JP Construction &amp; Contractors LLC, NJ License No. [# 13VH08960700]</li>
+          <li><strong>Written, itemized estimates</strong>No surprise charges at the end</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== SERVICES ========== -->
+    <section id="services">
+      <div class="wrap">
+        <h2>Types of work</h2>
+        <p class="section-intro">Professional concrete foundations and flatwork in South Jersey, built to your plans or our recommendations.</p>
+        <div class="grid-2">
+          <article class="service">
+            <h3>Foundations</h3>
+            <p>Professional concrete foundations in South Jersey: poured-wall and slab-on-grade foundations for new homes, additions and garages, with proper reinforcement and drainage prep.</p>
+          </article>
+          <article class="service">
+            <h3>Footings</h3>
+            <p>Concrete footings sized to South Jersey soil and load requirements, for house walls, decks, retaining walls and commercial columns.</p>
+          </article>
+          <article class="service">
+            <h3>Cellars &amp; Basements</h3>
+            <p>New concrete basement walls and floors, egress window openings, and waterproofing details that keep South Jersey lower levels dry and usable.</p>
+          </article>
+          <article class="service">
+            <h3>Driveways &amp; Slabs</h3>
+            <p>Concrete driveways, garage floors, patios, sidewalks, walkways, and slabs, finished with clean control joints and a durable broom or stamped surface of your choice.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PORTFOLIO (collapsed by default) ========== -->
+    <section id="portfolio">
+      <div class="wrap">
+        <h2>Portfolio</h2>
+        <p class="section-intro">A few recent South Jersey concrete projects. Open the panel, then use the arrows on each card to flip between photos.</p>
+
+        <details class="portfolio">
+          <summary>View past South Jersey concrete projects</summary>
+          <div class="portfolio-body">
+            <div class="grid-2">
+
+              <!--
+                Project 1. PHOTOS: save the image files in the same folder as this HTML file.
+                To swap a photo, change the filename in src="..." and the description in alt="...".
+                Keep the <span class="slide-tag"> label, or edit its wording.
+              -->
+              <article class="project">
+                <div class="slider" data-index="0">
+                  <div class="slides">
+                    <div class="slide">
+                      <img class="photo" src="DrivewayPrep.jpeg" alt="Driveway structural framing and reinforcement mesh prep" loading="lazy">
+                      <span class="slide-tag">Prep</span>
+                    </div>
+                    <div class="slide">
+                      <img class="photo" src="DrivewayFinished.jpeg" alt="Completed bright white concrete double driveway and sidewalk" loading="lazy">
+                      <span class="slide-tag">Finished</span>
+                    </div>
+                  </div>
+                  <button type="button" class="slider-btn prev" onclick="slideProject(this, -1)" aria-label="Previous image">&#8249;</button>
+                  <button type="button" class="slider-btn next" onclick="slideProject(this, 1)" aria-label="Next image">&#8250;</button>
+                </div>
+                <div class="project-info">
+                  <h3>New Home Foundation &amp; Driveway Package</h3>
+                  <p>Full-scale residential concrete execution. We handled everything from pouring the solid house foundation base to framing, reinforcing, and finishing the matching double-car driveway and front walkways for a premier South Jersey development.</p>
+                </div>
+              </article>
+
+              <!-- Project 2 -->
+              <article class="project">
+                <div class="slider" data-index="0">
+                  <div class="slides">
+                    <div class="slide">
+                      <img class="photo" src="NewConstructionForms.jpeg" alt="Deep site excavation with wooden blueprint formwork" loading="lazy">
+                      <span class="slide-tag">Forms</span>
+                    </div>
+                    <div class="slide">
+                      <img class="photo" src="NewConstructionTrench.jpeg" alt="Precision cut footing trench with aggregate stone base" loading="lazy">
+                      <span class="slide-tag">Trenches</span>
+                    </div>
+                  </div>
+                  <button type="button" class="slider-btn prev" onclick="slideProject(this, -1)" aria-label="Previous image">&#8249;</button>
+                  <button type="button" class="slider-btn next" onclick="slideProject(this, 1)" aria-label="Next image">&#8250;</button>
+                </div>
+                <div class="project-info">
+                  <h3>New Construction Footing &amp; Trench Prep</h3>
+                  <p>The critical groundwork required for maximum structural integrity. Our crew manages deep earthwork, code-compliant trench excavation, and aggregate stone sub-base compaction to ensure perfect drainage and guarantee a lifetime of foundation stability.</p>
+                </div>
+              </article>
+
+              <!-- Project 3 -->
+              <article class="project">
+                <div class="slider" data-index="0">
+                  <div class="slides">
+                    <div class="slide">
+                      <img class="photo" src="SidewalkPrep.jpeg" alt="Long public sidewalk pathway framing and staking along road" loading="lazy">
+                      <span class="slide-tag">Framing</span>
+                    </div>
+                    <div class="slide">
+                      <img class="photo" src="SidewalkFinished.jpeg" alt="Completed broom finish public sidewalk with precision tool joints" loading="lazy">
+                      <span class="slide-tag">Finished</span>
+                    </div>
+                  </div>
+                  <button type="button" class="slider-btn prev" onclick="slideProject(this, -1)" aria-label="Previous image">&#8249;</button>
+                  <button type="button" class="slider-btn next" onclick="slideProject(this, 1)" aria-label="Next image">&#8250;</button>
+                </div>
+                <div class="project-info">
+                  <h3>Municipal Public Sidewalk Infrastructure</h3>
+                  <p>High-volume public flatwork built to meet strict local municipal codes. Meticulously graded, formed, and finished with a slip-resistant broom texture designed to withstand heavy South Jersey foot traffic and weather elements.</p>
+                </div>
+              </article>
+
+              <!-- Project 4 -->
+              <article class="project">
+                <div class="slider" data-index="0">
+                  <div class="slides">
+                    <div class="slide">
+                      <img class="photo" src="AngleA.jpeg" alt="Front perspective of expansive wide format concrete staging pad" loading="lazy">
+                      <span class="slide-tag">Angle A</span>
+                    </div>
+                    <div class="slide">
+                      <img class="photo" src="AngleB.jpeg" alt="Side profile angle showing level concrete finish and straight expansion joints" loading="lazy">
+                      <span class="slide-tag">Angle B</span>
+                    </div>
+                  </div>
+                  <button type="button" class="slider-btn prev" onclick="slideProject(this, -1)" aria-label="Previous image">&#8249;</button>
+                  <button type="button" class="slider-btn next" onclick="slideProject(this, 1)" aria-label="Next image">&#8250;</button>
+                </div>
+                <div class="project-info">
+                  <h3>Heavy-Duty Development Access Roads</h3>
+                  <p>Industrial-scale residential development concrete flatwork. This massive wide-format pour features an expansive concrete access pad engineered with robust structural thickness and deep control joints to handle heavy equipment and high-volume vehicle staging.</p>
+                </div>
+              </article>
+
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ========== PARTNERS ========== -->
+    <section id="partners">
+      <div class="wrap">
+        <h2>Contractors and companies we work with</h2>
+        <p class="section-intro">Builders, suppliers and property managers across South Jersey who call JLP Concrete back job after job.</p>
+        <div class="carousel">
+          <button type="button" class="carousel-btn" onclick="scrollPartners(-1)" aria-label="Scroll partners left">&lt;</button>
+
+          <!-- EDIT: One <li> per company. Copy a line to add one, delete a line to remove one. -->
+          <ul class="partner-track" id="partnerTrack" tabindex="0" aria-label="Companies we work with">
+            <li class="partner-badge">Galaxy Construction LLC (New Jersey)</li>
+            <li class="partner-badge">Touch of Modern LLC (Jersey)</li>
+            <li class="partner-badge">All Zone Construction, LLC</li>
+            <li class="partner-badge">Ryan Homes</li>
+            <li class="partner-badge">Vansant Environmental LLC</li>
+          </ul>
+
+          <button type="button" class="carousel-btn" onclick="scrollPartners(1)" aria-label="Scroll partners right">&gt;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CONTACT ========== -->
+    <section id="contact">
+      <div class="wrap">
+        <h2>Contact us</h2>
+        <p class="section-intro">Tell JLP Concrete about your South Jersey project and we will follow up with a site visit and written estimate.</p>
+        <div class="contact-grid">
+
+          <!--
+            FORM SETUP: This form is static and will not send anything yet.
+            To make it work, replace action="#" with your form service URL
+            (for example Formspree, Basin or Netlify Forms), or ask your web host.
+          -->
+          <form action="#" method="post">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required>
+
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel">
+
+            <label for="details">Project details</label>
+            <textarea id="details" name="details" placeholder="Type of work, address, size, and when you would like to start"></textarea>
+
+            <button type="submit" class="btn">Send request</button>
+          </form>
+
+          <!-- EDIT: Your real contact details -->
+          <ul class="contact-info">
+            <li><strong>Phone</strong><a href="tel:+18565550123">(856) 555-0123</a></li>
+            <li><strong>Email</strong><a href="mailto:info@jlpconcrete.com">info@jlpconcrete.com</a></li>
+            <li><strong>Service area</strong>South Jersey concrete contractors proudly serving Atlantic, Gloucester, Camden, Cumberland, Cape May, Burlington, and Salem counties, including Egg Harbor, Glassboro, and surrounding areas.</li>
+            <li><strong>Hours</strong>Mon to Fri, 7 am to 5 pm</li>
+          </ul>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <div class="wrap">
+      <!-- Copyright and legal umbrella -->
+      <p>&copy; 2026 JLP Concrete. Operated by JP Construction &amp; Contractors LLC. All rights reserved.</p>
+      <p>South Jersey concrete contractors. Licensed, bonded and insured. NJ License No. [13VH08960700].</p>
+    </div>
+  </footer>
+
+  <!--
+    PORTFOLIO PHOTO SLIDERS
+    Each < or > button slides its own card between that card's images.
+    Add more <div class="slide"> blocks in a card and this still works.
+  -->
+  <script>
+    function slideProject(button, direction) {
+      var slider = button.closest(".slider");
+      var slides = slider.querySelector(".slides");
+      var count = slides.children.length;
+      var index = (Number(slider.dataset.index) + direction + count) % count;   // wraps around
+      slider.dataset.index = index;
+      slides.style.transform = "translateX(-" + (index * 100) + "%)";
+    }
+  </script>
+
+  <!--
+    PARTNER CAROUSEL ARROWS
+    Scrolls the partner row left (-1) or right (1) by most of its visible width.
+  -->
+  <script>
+    function scrollPartners(direction) {
+      var track = document.getElementById("partnerTrack");
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      track.scrollBy({
+        left: direction * track.clientWidth * 0.8,
+        behavior: reduce ? "auto" : "smooth"
+      });
+    }
+  </script>
+
+  <!--
+    HEADER AUTO-HIDE (the only JavaScript on the page)
+    Scroll down: the header slides up out of view.
+    Scroll up even slightly: it slides back down.
+    If JavaScript is off, the header simply stays visible.
+  -->
+  <script>
+    (function () {
+      var header = document.querySelector(".site-header");
+      var lastY = window.pageYOffset;   // scroll position at the last check
+      var waiting = false;              // limits work to once per screen refresh
+      var MIN_MOVE = 4;                 // pixels of scrolling to ignore (stops jitter)
+
+      function update() {
+        var y = Math.max(window.pageYOffset, 0);
+
+        // Always show the header at the very top of the page
+        if (y <= header.offsetHeight) {
+          header.classList.remove("is-hidden");
+        } else if (y > lastY + MIN_MOVE) {
+          header.classList.add("is-hidden");      // scrolling down: hide
+        } else if (y < lastY - MIN_MOVE) {
+          header.classList.remove("is-hidden");   // scrolling up: show
+        }
+
+        if (Math.abs(y - lastY) > MIN_MOVE) { lastY = y; }
+        waiting = false;
+      }
+
+      window.addEventListener("scroll", function () {
+        if (!waiting) {
+          waiting = true;
+          window.requestAnimationFrame(update);
+        }
+      }, { passive: true });
+
+      // Keyboard users tabbing into the menu always see it
+      header.addEventListener("focusin", function () {
+        header.classList.remove("is-hidden");
+      });
+    })();
+  </script>
+
+</body>
+</html>

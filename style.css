@@ -1,0 +1,537 @@
+/* ==========================================================
+   style.css  -  all styling for the JLP Concrete website
+   Edit colors and fonts in section 1 (:root) at the top.
+   Behavior (scrolling, sliders, photo viewer) is in script.js.
+   ========================================================== */
+
+/* ==========================================================
+   1. DESIGN TOKENS
+   Change colors, fonts and spacing here; they update the
+   whole page. Hex codes can be swapped for your brand colors.
+   ========================================================== */
+:root {
+  --bg:        #f1f2f0;   /* page background (soft concrete gray-white) */
+  --surface:   #ffffff;   /* cards and form fields */
+  --slab:      #dfe1de;   /* light gray blocks / placeholders */
+  --slab-dark: #b8bfcc;   /* placeholder borders (cool gray) */
+  /* Colors taken from the logo: deep navy (#0f172a) and white.
+     Eyedrop your logo file and replace --navy if the match is off. */
+  --navy:      #0f172a;   /* logo navy: the single brand color */
+  --blueprint: #0f2d59;   /* blueprint paper blue: hero + empty photo frames (try #1a365d for lighter) */
+  --ink:       #0f172a;   /* main text */
+  --ink-soft:  #4a5568;   /* secondary text (navy-tinted gray) */
+  --accent:    #0f172a;   /* buttons, section headings, links */
+  --accent-dk: #26375d;   /* hover state: a lighter navy */
+  --line:      #0f172a;   /* the heavy outline used on all boxes */
+
+  /* Heavy geometric sans like the logo letters (JLP / CONCRETE) */
+  --font-display: "Archivo Black", "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --font:         "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --max:  1120px;         /* maximum content width */
+  --gap:  24px;           /* standard space between boxes */
+}
+
+/* ==========================================================
+   2. BASE / RESET
+   ========================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;      /* smooth anchor scrolling */
+  scroll-padding-top: 160px;     /* keeps headings clear of the sticky header */
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+/* Archivo Black has one weight, so headings use font-weight 400 to avoid fake bold */
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.1rem, 5.2vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 3.2vw, 2.2rem); color: var(--accent); }
+h3 { font-size: 1.15rem; }
+p  { margin: 0 0 16px; max-width: 68ch; }
+a  { color: var(--accent); }
+
+/* Visible keyboard focus for accessibility */
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* Respect visitors who turn off motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* ==========================================================
+   3. LAYOUT HELPERS
+   ========================================================== */
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+section { padding: 72px 0; }
+.section-intro { color: var(--ink-soft); margin-bottom: 32px; }
+
+/* ==========================================================
+   4. IMAGE PLACEHOLDERS
+   Each placeholder has a fixed aspect-ratio so you can see
+   what size photo to use. To add a real photo, replace the
+   whole <div class="ph"> with:
+   <img src="your-photo.jpg" alt="Describe the photo" class="photo">
+   ========================================================== */
+.ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+  background: var(--slab);
+  border: 2px dashed var(--slab-dark);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: 100%;
+}
+.ph-4x3  { aspect-ratio: 4 / 3; }
+.ph-16x9 { aspect-ratio: 16 / 9; }
+.photo   { display: block; width: 100%; height: auto; object-fit: cover; }
+
+/* ==========================================================
+   5. HEADER / NAVIGATION
+   ========================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-bottom: 3px solid var(--line);
+  /* Smooth slide when the header hides or returns (controlled by the script at the bottom of the page) */
+  transition: transform 0.3s ease-in-out;
+}
+/* Added by the script when scrolling down: slides the whole header up out of view */
+.site-header.is-hidden { transform: translateY(-100%); }
+/* Visitors who prefer no motion get an instant change instead of a slide */
+@media (prefers-reduced-motion: reduce) {
+  .site-header { transition: none; }
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 148px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+/* ============================================================
+   === EDIT LOGO SIZE HERE ===
+   To make the logo bigger or smaller on computers, change the
+   number on the "height: 128px;" line just below (try 100 to 160).
+   The width follows automatically, so the logo never stretches.
+   The phone size is a separate number: search this file for
+   "EDIT LOGO SIZE ON PHONES".
+   No max-height or max-width limits are set on the logo.
+   ============================================================ */
+
+/* The logo is a square with its own navy background, so it reads as a badge. */
+.logo { display: block; line-height: 0; }
+.logo img {
+  display: block;
+  height: 128px;   /* <-- CHANGE THIS NUMBER to resize the logo (desktop) */
+  width: auto;
+}
+.nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
+.nav ul a { color: var(--ink); text-decoration: none; font-weight: 600; padding: 6px 0; border-bottom: 3px solid transparent; }
+.nav ul a:hover { border-bottom-color: var(--accent); }
+
+/* ==========================================================
+   6. HERO
+   Architectural blueprint background: deep blue paper with
+   thin white drafting-grid lines, drawn entirely in CSS.
+   To use a real photo instead, replace the background-image and
+   background-size lines in .hero with:
+   background-image: url("hero.jpg"); background-size: cover;
+   ========================================================== */
+.hero {
+  padding: 0;
+  /* Blueprint paper: deep blue base (color set by --blueprint at the top of this file) */
+  background-color: var(--blueprint);
+  /* Drafting grid, drawn with thin translucent white lines.
+     The first two layers are the large squares, the last two are the fine sub-grid. */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;   /* big square, then fine square */
+  border-bottom: 3px solid var(--line);
+}
+.hero .wrap { padding-top: 88px; padding-bottom: 88px; }
+.hero-box {
+  max-width: 680px;
+  background: var(--surface);
+  border: 3px solid var(--line);
+  padding: 40px;
+  /* Soft shadow lifts the white panel off the blueprint */
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+.hero-box p { font-size: 1.15rem; color: var(--ink-soft); }
+.hero-note { font-size: 0.85rem; margin-top: 12px; color: var(--ink-soft); }
+
+/* ==========================================================
+   7. BUTTONS
+   ========================================================== */
+.btn {
+  display: inline-block;
+  padding: 14px 28px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-decoration: none;
+  border: 2px solid var(--line);
+  cursor: pointer;
+}
+.btn:hover { background: var(--accent-dk); }
+
+/* ==========================================================
+   8. ABOUT
+   ========================================================== */
+.about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
+.facts { list-style: none; margin: 0; padding: 0; border: 2px solid var(--line); background: var(--surface); }
+.facts li { padding: 16px 20px; border-bottom: 2px solid var(--line); }
+.facts li:last-child { border-bottom: 0; }
+.facts strong { display: block; font-family: var(--font-display); font-weight: 400; font-size: 1.05rem; }
+
+/* ==========================================================
+   9. SERVICES GRID
+   ========================================================== */
+#services { background: var(--surface); border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap); }
+.service { background: var(--bg); border: 2px solid var(--line); padding: 28px; }
+.service p { margin-bottom: 0; color: var(--ink-soft); }
+
+/* ==========================================================
+   10. PORTFOLIO (collapsed by default)
+   Uses the built-in <details> tag: no JavaScript needed.
+   To make it open on page load, change <details> to <details open>.
+   ========================================================== */
+/* Clean white "gallery wall" behind the cards */
+#portfolio { background: var(--surface); border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); }
+details.portfolio { border: 3px solid var(--line); background: var(--surface); }
+details.portfolio summary {
+  cursor: pointer;
+  padding: 20px 24px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 400;
+  list-style: none;                 /* hides default arrow */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+details.portfolio summary::-webkit-details-marker { display: none; }
+details.portfolio summary::after { content: "+"; font-size: 1.8rem; color: var(--accent); }
+details.portfolio[open] summary { border-bottom: 3px solid var(--line); background: var(--slab); }
+details.portfolio[open] summary::after { content: "\2212"; }   /* minus sign when open */
+.portfolio-body { padding: 24px; }
+.project { background: var(--bg); border: 2px solid var(--line); }
+.project-info { padding: 16px 20px 20px; }
+.project-info p { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+
+/* ----------------------------------------------------------
+   PROJECT PHOTO SLIDER (inside each portfolio card)
+   Two images sit side by side inside .slides. The < and >
+   buttons slide the strip left or right. overflow: hidden
+   keeps the hidden image from spilling out of the card.
+   To change the photo shape, edit the aspect-ratio below
+   (4 / 3 = standard landscape, 3 / 2 = wider, 1 / 1 = square).
+   ---------------------------------------------------------- */
+.slider {
+  position: relative;               /* lets the arrow buttons sit on top */
+  overflow: hidden;                 /* no layout breaking */
+  aspect-ratio: 4 / 3;
+  border-bottom: 2px solid var(--line);
+  /* Blueprint fallback: shows behind each photo while it loads, or if a file is missing */
+  background-color: var(--blueprint);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px, 60px 60px, 12px 12px, 12px 12px;
+}
+.slides {
+  display: flex;
+  height: 100%;
+  transition: transform 0.4s ease-in-out;   /* smooth slide between images */
+}
+.slide { position: relative; flex: 0 0 100%; height: 100%; }
+.slide .photo { width: 100%; height: 100%; object-fit: cover; }  /* real photos fill it too */
+
+/* Small label in the corner of each image (Prep, Finished, etc.) */
+.slide-tag {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  padding: 6px 12px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+}
+
+/* Left and right arrow buttons, floating over the image edges */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  background: rgba(15, 23, 42, 0.65);   /* semi-transparent navy */
+  color: #fff;
+  font-size: 2.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.slider-btn:hover { background: rgba(15, 23, 42, 0.9); }
+.slider-btn.prev { left: 0; }
+.slider-btn.next { right: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slides { transition: none; }
+}
+
+/* ==========================================================
+   11. PARTNERS (horizontal scrolling carousel)
+   The row of company names scrolls left and right. The < and >
+   buttons scroll it, and visitors can also swipe or drag on
+   touch screens and trackpads. The scrollbar is hidden.
+   To add a company, copy one <li class="partner-badge"> line in
+   the HTML below and change the name.
+   ========================================================== */
+.carousel { display: flex; align-items: stretch; gap: 12px; }
+
+/* The scrolling row */
+.partner-track {
+  flex: 1;
+  min-width: 0;                    /* lets the row shrink so it can scroll */
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 4px 2px;                /* room so outlines are not clipped */
+  list-style: none;
+  white-space: nowrap;             /* keeps each name on one line */
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;   /* every swipe stops exactly at the start of a company box */
+  scroll-padding: 0 2px;           /* matches the row padding so the first box lines up */
+  overscroll-behavior-x: contain;  /* stops the whole page from tugging sideways */
+  scrollbar-width: none;           /* hide scrollbar: Firefox */
+}
+.partner-track::-webkit-scrollbar { display: none; }   /* hide scrollbar: Chrome, Safari */
+
+/* One text-based "logo badge" per company */
+.partner-badge {
+  flex: 0 0 auto;                  /* never shrink or wrap */
+  display: flex;
+  align-items: center;
+  padding: 28px 32px;
+  background: var(--slab);
+  border: 2px solid var(--line);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;        /* a fast swipe cannot skip past a box */
+}
+
+/* The < and > arrow buttons */
+.carousel-btn {
+  flex: 0 0 auto;
+  width: 48px;
+  background: var(--accent);
+  color: #fff;
+  border: 2px solid var(--line);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.carousel-btn:hover { background: var(--accent-dk); }
+
+/* ==========================================================
+   12. CONTACT
+   ========================================================== */
+#contact { background: var(--ink); color: #fff; }
+#contact h2 { color: #fff; }
+#contact .section-intro { color: #c8ced3; }
+.contact-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; }
+form { background: var(--surface); color: var(--ink); border: 3px solid var(--bg); padding: 28px; }
+label { display: block; font-weight: 700; margin-bottom: 6px; }
+input, textarea {
+  width: 100%;
+  font: inherit;
+  padding: 12px;
+  margin-bottom: 18px;
+  border: 2px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+}
+textarea { min-height: 130px; resize: vertical; }
+.contact-info { list-style: none; margin: 0; padding: 0; }
+.contact-info li { padding: 16px 0; border-bottom: 1px solid #2c3a57; }
+.contact-info strong { display: block; font-family: var(--font-display); font-weight: 400; color: #b8c4dc; }
+.contact-info a { color: #fff; }
+
+/* ==========================================================
+   13. FOOTER
+   ========================================================== */
+footer { background: var(--surface); border-top: 3px solid var(--line); padding: 28px 0; font-size: 0.9rem; color: var(--ink-soft); }
+footer p { margin: 0 0 4px; max-width: none; }
+
+/* ==========================================================
+   14. RESPONSIVE (tablet and phone)
+   ========================================================== */
+@media (max-width: 860px) {
+  .about-grid, .contact-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  section { padding: 52px 0; }
+  .nav { flex-direction: column; align-items: flex-start; padding-top: 10px; padding-bottom: 10px; gap: 8px; min-height: 0; }
+  /* === EDIT LOGO SIZE ON PHONES: change the number on the next line === */
+  .logo img { height: 96px; }
+  .nav ul { gap: 14px; flex-wrap: wrap; font-size: 0.95rem; }
+  html { scroll-padding-top: 200px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .hero .wrap { padding-top: 48px; padding-bottom: 48px; }
+  .hero-box { padding: 24px; }
+}
+
+/* ==========================================================
+   15. SCROLL REVEAL
+   script.js adds .reveal to sections below the screen, then
+   .is-visible as they scroll into view. If JavaScript is off,
+   nothing is hidden.
+   ========================================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ==========================================================
+   16. PORTFOLIO PHOTOS: CLICK TO ENLARGE
+   ========================================================== */
+.slide .photo { cursor: zoom-in; }
+.slider::after {
+  content: "Tap to enlarge";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  pointer-events: none;            /* clicks pass through to the photo */
+}
+
+/* ==========================================================
+   17. LIGHTBOX (full-screen photo viewer with zoom)
+   ========================================================== */
+body.lb-open { overflow: hidden; }          /* page stays still behind the viewer */
+.lightbox[hidden] { display: none; }
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;                            /* above the header */
+  background: rgba(8, 12, 22, 0.96);        /* dark overlay */
+}
+.lb-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;                       /* script.js handles swipe and pinch */
+  cursor: zoom-in;
+  user-select: none;
+}
+.lightbox.is-zoomed .lb-stage { cursor: grab; }
+.lb-img {
+  max-width: calc(100% - 24px);
+  max-height: calc(100% - 128px);           /* leaves room for the top button and bottom bar */
+  transform-origin: center;
+  transition: transform 0.2s ease-out;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.lightbox.is-dragging .lb-img { transition: none; }   /* follows the finger exactly while dragging */
+
+/* Round-cornered-free square buttons, matching the site's boxy style */
+.lb-btn {
+  position: absolute;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 1.9rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.lb-btn:hover { background: rgba(255, 255, 255, 0.3); }
+.lb-btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.lb-close { top: 12px; right: 12px; }
+.lb-prev  { left: 12px;  top: 50%; transform: translateY(-50%); }
+.lb-next  { right: 12px; top: 50%; transform: translateY(-50%); }
+
+/* Bottom bar: photo description, "3 / 8" counter, zoom buttons */
+.lb-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  color: #fff;
+  font-size: 0.9rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+  pointer-events: none;                     /* only the zoom buttons catch clicks */
+}
+.lb-caption { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lb-count { font-family: var(--font-display); }
+.lb-zoom { display: flex; gap: 8px; pointer-events: auto; }
+.lb-mini { position: static; width: 40px; height: 40px; font-size: 1.4rem; }
+@media (pointer: coarse) { .lb-zoom { display: none; } }   /* touch screens pinch instead */
+@media (max-width: 640px) {
+  .lb-btn { width: 42px; height: 42px; }
+  .lb-prev { left: 6px; }
+  .lb-next { right: 6px; }
+}
+
+/* ==========================================================
+   18. CONTACT FORM MESSAGES
+   ========================================================== */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }   /* spam trap, invisible */
+.form-status { margin: 14px 0 0; font-weight: 600; }
+.form-status:empty { display: none; }                  /* no empty gap before a message appears */
+.form-status.ok { color: #9be3b4; }                    /* light green: sits on the dark contact background */
+.form-status.error { color: #ffb4b4; }                 /* light red */
+.fs-error { display: block; margin: -12px 0 14px; color: #a12a2a; font-size: 0.9rem; font-weight: 600; }
+.fs-error:empty { display: none; }
+input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: #a12a2a; }

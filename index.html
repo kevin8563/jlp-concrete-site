@@ -16,411 +16,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&display=swap">
 
-  <style>
-    /* ==========================================================
-       1. DESIGN TOKENS
-       Change colors, fonts and spacing here; they update the
-       whole page. Hex codes can be swapped for your brand colors.
-       ========================================================== */
-    :root {
-      --bg:        #f1f2f0;   /* page background (soft concrete gray-white) */
-      --surface:   #ffffff;   /* cards and form fields */
-      --slab:      #dfe1de;   /* light gray blocks / placeholders */
-      --slab-dark: #b8bfcc;   /* placeholder borders (cool gray) */
-      /* Colors taken from the logo: deep navy (#0f172a) and white.
-         Eyedrop your logo file and replace --navy if the match is off. */
-      --navy:      #0f172a;   /* logo navy: the single brand color */
-      --blueprint: #0f2d59;   /* blueprint paper blue: hero + empty photo frames (try #1a365d for lighter) */
-      --ink:       #0f172a;   /* main text */
-      --ink-soft:  #4a5568;   /* secondary text (navy-tinted gray) */
-      --accent:    #0f172a;   /* buttons, section headings, links */
-      --accent-dk: #26375d;   /* hover state: a lighter navy */
-      --line:      #0f172a;   /* the heavy outline used on all boxes */
-
-      /* Heavy geometric sans like the logo letters (JLP / CONCRETE) */
-      --font-display: "Archivo Black", "Arial Black", "Helvetica Neue", Arial, sans-serif;
-      --font:         "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
-      --max:  1120px;         /* maximum content width */
-      --gap:  24px;           /* standard space between boxes */
-    }
-
-    /* ==========================================================
-       2. BASE / RESET
-       ========================================================== */
-    *, *::before, *::after { box-sizing: border-box; }
-
-    html {
-      scroll-behavior: smooth;      /* smooth anchor scrolling */
-      scroll-padding-top: 160px;     /* keeps headings clear of the sticky header */
-    }
-
-    body {
-      margin: 0;
-      font-family: var(--font);
-      font-size: 17px;
-      line-height: 1.6;
-      color: var(--ink);
-      background: var(--bg);
-    }
-
-    /* Archivo Black has one weight, so headings use font-weight 400 to avoid fake bold */
-    h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.01em; }
-    h1 { font-size: clamp(2.1rem, 5.2vw, 3.6rem); }
-    h2 { font-size: clamp(1.6rem, 3.2vw, 2.2rem); color: var(--accent); }
-    h3 { font-size: 1.15rem; }
-    p  { margin: 0 0 16px; max-width: 68ch; }
-    a  { color: var(--accent); }
-
-    /* Visible keyboard focus for accessibility */
-    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-
-    /* Respect visitors who turn off motion */
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-    }
-
-    /* ==========================================================
-       3. LAYOUT HELPERS
-       ========================================================== */
-    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
-    section { padding: 72px 0; }
-    .section-intro { color: var(--ink-soft); margin-bottom: 32px; }
-
-    /* ==========================================================
-       4. IMAGE PLACEHOLDERS
-       Each placeholder has a fixed aspect-ratio so you can see
-       what size photo to use. To add a real photo, replace the
-       whole <div class="ph"> with:
-       <img src="your-photo.jpg" alt="Describe the photo" class="photo">
-       ========================================================== */
-    .ph {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 12px;
-      background: var(--slab);
-      border: 2px dashed var(--slab-dark);
-      color: var(--ink-soft);
-      font-size: 0.9rem;
-      font-weight: 600;
-      width: 100%;
-    }
-    .ph-4x3  { aspect-ratio: 4 / 3; }
-    .ph-16x9 { aspect-ratio: 16 / 9; }
-    .photo   { display: block; width: 100%; height: auto; object-fit: cover; }
-
-    /* ==========================================================
-       5. HEADER / NAVIGATION
-       ========================================================== */
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: var(--surface);
-      border-bottom: 3px solid var(--line);
-      /* Smooth slide when the header hides or returns (controlled by the script at the bottom of the page) */
-      transition: transform 0.3s ease-in-out;
-    }
-    /* Added by the script when scrolling down: slides the whole header up out of view */
-    .site-header.is-hidden { transform: translateY(-100%); }
-    /* Visitors who prefer no motion get an instant change instead of a slide */
-    @media (prefers-reduced-motion: reduce) {
-      .site-header { transition: none; }
-    }
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      min-height: 148px;
-      padding-top: 8px;
-      padding-bottom: 8px;
-    }
-    /* ============================================================
-       === EDIT LOGO SIZE HERE ===
-       To make the logo bigger or smaller on computers, change the
-       number on the "height: 128px;" line just below (try 100 to 160).
-       The width follows automatically, so the logo never stretches.
-       The phone size is a separate number: search this file for
-       "EDIT LOGO SIZE ON PHONES".
-       No max-height or max-width limits are set on the logo.
-       ============================================================ */
-
-    /* The logo is a square with its own navy background, so it reads as a badge. */
-    .logo { display: block; line-height: 0; }
-    .logo img {
-      display: block;
-      height: 128px;   /* <-- CHANGE THIS NUMBER to resize the logo (desktop) */
-      width: auto;
-    }
-    .nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; }
-    .nav ul a { color: var(--ink); text-decoration: none; font-weight: 600; padding: 6px 0; border-bottom: 3px solid transparent; }
-    .nav ul a:hover { border-bottom-color: var(--accent); }
-
-    /* ==========================================================
-       6. HERO
-       Architectural blueprint background: deep blue paper with
-       thin white drafting-grid lines, drawn entirely in CSS.
-       To use a real photo instead, replace the background-image and
-       background-size lines in .hero with:
-       background-image: url("hero.jpg"); background-size: cover;
-       ========================================================== */
-    .hero {
-      padding: 0;
-      /* Blueprint paper: deep blue base (color set by --blueprint at the top of this file) */
-      background-color: var(--blueprint);
-      /* Drafting grid, drawn with thin translucent white lines.
-         The first two layers are the large squares, the last two are the fine sub-grid. */
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-      background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;   /* big square, then fine square */
-      border-bottom: 3px solid var(--line);
-    }
-    .hero .wrap { padding-top: 88px; padding-bottom: 88px; }
-    .hero-box {
-      max-width: 680px;
-      background: var(--surface);
-      border: 3px solid var(--line);
-      padding: 40px;
-      /* Soft shadow lifts the white panel off the blueprint */
-      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.3);
-    }
-    .hero-box p { font-size: 1.15rem; color: var(--ink-soft); }
-    .hero-note { font-size: 0.85rem; margin-top: 12px; color: var(--ink-soft); }
-
-    /* ==========================================================
-       7. BUTTONS
-       ========================================================== */
-    .btn {
-      display: inline-block;
-      padding: 14px 28px;
-      background: var(--accent);
-      color: #fff;
-      font: inherit;
-      font-family: var(--font-display);
-      font-weight: 400;
-      text-decoration: none;
-      border: 2px solid var(--line);
-      cursor: pointer;
-    }
-    .btn:hover { background: var(--accent-dk); }
-
-    /* ==========================================================
-       8. ABOUT
-       ========================================================== */
-    .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start; }
-    .facts { list-style: none; margin: 0; padding: 0; border: 2px solid var(--line); background: var(--surface); }
-    .facts li { padding: 16px 20px; border-bottom: 2px solid var(--line); }
-    .facts li:last-child { border-bottom: 0; }
-    .facts strong { display: block; font-family: var(--font-display); font-weight: 400; font-size: 1.05rem; }
-
-    /* ==========================================================
-       9. SERVICES GRID
-       ========================================================== */
-    #services { background: var(--surface); border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap); }
-    .service { background: var(--bg); border: 2px solid var(--line); padding: 28px; }
-    .service p { margin-bottom: 0; color: var(--ink-soft); }
-
-    /* ==========================================================
-       10. PORTFOLIO (collapsed by default)
-       Uses the built-in <details> tag: no JavaScript needed.
-       To make it open on page load, change <details> to <details open>.
-       ========================================================== */
-    /* Clean white "gallery wall" behind the cards */
-    #portfolio { background: var(--surface); border-top: 3px solid var(--line); border-bottom: 3px solid var(--line); }
-    details.portfolio { border: 3px solid var(--line); background: var(--surface); }
-    details.portfolio summary {
-      cursor: pointer;
-      padding: 20px 24px;
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 400;
-      list-style: none;                 /* hides default arrow */
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    details.portfolio summary::-webkit-details-marker { display: none; }
-    details.portfolio summary::after { content: "+"; font-size: 1.8rem; color: var(--accent); }
-    details.portfolio[open] summary { border-bottom: 3px solid var(--line); background: var(--slab); }
-    details.portfolio[open] summary::after { content: "\2212"; }   /* minus sign when open */
-    .portfolio-body { padding: 24px; }
-    .project { background: var(--bg); border: 2px solid var(--line); }
-    .project-info { padding: 16px 20px 20px; }
-    .project-info p { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
-
-    /* ----------------------------------------------------------
-       PROJECT PHOTO SLIDER (inside each portfolio card)
-       Two images sit side by side inside .slides. The < and >
-       buttons slide the strip left or right. overflow: hidden
-       keeps the hidden image from spilling out of the card.
-       To change the photo shape, edit the aspect-ratio below
-       (4 / 3 = standard landscape, 3 / 2 = wider, 1 / 1 = square).
-       ---------------------------------------------------------- */
-    .slider {
-      position: relative;               /* lets the arrow buttons sit on top */
-      overflow: hidden;                 /* no layout breaking */
-      aspect-ratio: 4 / 3;
-      border-bottom: 2px solid var(--line);
-      /* Blueprint fallback: shows behind each photo while it loads, or if a file is missing */
-      background-color: var(--blueprint);
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-        linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-      background-size: 60px 60px, 60px 60px, 12px 12px, 12px 12px;
-    }
-    .slides {
-      display: flex;
-      height: 100%;
-      transition: transform 0.4s ease-in-out;   /* smooth slide between images */
-    }
-    .slide { position: relative; flex: 0 0 100%; height: 100%; }
-    .slide .photo { width: 100%; height: 100%; object-fit: cover; }  /* real photos fill it too */
-
-    /* Small label in the corner of each image (Prep, Finished, etc.) */
-    .slide-tag {
-      position: absolute;
-      left: 12px;
-      bottom: 12px;
-      padding: 6px 12px;
-      background: rgba(15, 23, 42, 0.85);
-      color: #fff;
-      font-family: var(--font-display);
-      font-size: 0.8rem;
-    }
-
-    /* Left and right arrow buttons, floating over the image edges */
-    .slider-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 44px;
-      height: 64px;
-      padding: 0;
-      border: 0;
-      background: rgba(15, 23, 42, 0.65);   /* semi-transparent navy */
-      color: #fff;
-      font-size: 2.2rem;
-      line-height: 1;
-      cursor: pointer;
-    }
-    .slider-btn:hover { background: rgba(15, 23, 42, 0.9); }
-    .slider-btn.prev { left: 0; }
-    .slider-btn.next { right: 0; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .slides { transition: none; }
-    }
-
-    /* ==========================================================
-       11. PARTNERS (horizontal scrolling carousel)
-       The row of company names scrolls left and right. The < and >
-       buttons scroll it, and visitors can also swipe or drag on
-       touch screens and trackpads. The scrollbar is hidden.
-       To add a company, copy one <li class="partner-badge"> line in
-       the HTML below and change the name.
-       ========================================================== */
-    .carousel { display: flex; align-items: stretch; gap: 12px; }
-
-    /* The scrolling row */
-    .partner-track {
-      flex: 1;
-      min-width: 0;                    /* lets the row shrink so it can scroll */
-      display: flex;
-      gap: 16px;
-      margin: 0;
-      padding: 4px 2px;                /* room so outlines are not clipped */
-      list-style: none;
-      white-space: nowrap;             /* keeps each name on one line */
-      overflow-x: auto;
-      scroll-snap-type: x proximity;   /* gently lines cards up after a swipe */
-      scrollbar-width: none;           /* hide scrollbar: Firefox */
-    }
-    .partner-track::-webkit-scrollbar { display: none; }   /* hide scrollbar: Chrome, Safari */
-
-    /* One text-based "logo badge" per company */
-    .partner-badge {
-      flex: 0 0 auto;                  /* never shrink or wrap */
-      display: flex;
-      align-items: center;
-      padding: 28px 32px;
-      background: var(--slab);
-      border: 2px solid var(--line);
-      color: var(--ink);
-      font-family: var(--font-display);
-      font-size: 1.05rem;
-      scroll-snap-align: start;
-    }
-
-    /* The < and > arrow buttons */
-    .carousel-btn {
-      flex: 0 0 auto;
-      width: 48px;
-      background: var(--accent);
-      color: #fff;
-      border: 2px solid var(--line);
-      font-family: var(--font-display);
-      font-size: 1.6rem;
-      line-height: 1;
-      cursor: pointer;
-    }
-    .carousel-btn:hover { background: var(--accent-dk); }
-
-    /* ==========================================================
-       12. CONTACT
-       ========================================================== */
-    #contact { background: var(--ink); color: #fff; }
-    #contact h2 { color: #fff; }
-    #contact .section-intro { color: #c8ced3; }
-    .contact-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: start; }
-    form { background: var(--surface); color: var(--ink); border: 3px solid var(--bg); padding: 28px; }
-    label { display: block; font-weight: 700; margin-bottom: 6px; }
-    input, textarea {
-      width: 100%;
-      font: inherit;
-      padding: 12px;
-      margin-bottom: 18px;
-      border: 2px solid var(--line);
-      background: var(--bg);
-      color: var(--ink);
-    }
-    textarea { min-height: 130px; resize: vertical; }
-    .contact-info { list-style: none; margin: 0; padding: 0; }
-    .contact-info li { padding: 16px 0; border-bottom: 1px solid #2c3a57; }
-    .contact-info strong { display: block; font-family: var(--font-display); font-weight: 400; color: #b8c4dc; }
-    .contact-info a { color: #fff; }
-
-    /* ==========================================================
-       13. FOOTER
-       ========================================================== */
-    footer { background: var(--surface); border-top: 3px solid var(--line); padding: 28px 0; font-size: 0.9rem; color: var(--ink-soft); }
-    footer p { margin: 0 0 4px; max-width: none; }
-
-    /* ==========================================================
-       14. RESPONSIVE (tablet and phone)
-       ========================================================== */
-    @media (max-width: 860px) {
-      .about-grid, .contact-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 640px) {
-      section { padding: 52px 0; }
-      .nav { flex-direction: column; align-items: flex-start; padding-top: 10px; padding-bottom: 10px; gap: 8px; min-height: 0; }
-      /* === EDIT LOGO SIZE ON PHONES: change the number on the next line === */
-      .logo img { height: 96px; }
-      .nav ul { gap: 14px; flex-wrap: wrap; font-size: 0.95rem; }
-      html { scroll-padding-top: 200px; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .hero .wrap { padding-top: 48px; padding-bottom: 48px; }
-      .hero-box { padding: 24px; }
-    }
-  </style>
+  <!-- All styling lives in style.css -->
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -536,8 +133,8 @@
                       <span class="slide-tag">Finished</span>
                     </div>
                   </div>
-                  <button type="button" class="slider-btn prev" onclick="slideProject(this, -1)" aria-label="Previous image">&#8249;</button>
-                  <button type="button" class="slider-btn next" onclick="slideProject(this, 1)" aria-label="Next image">&#8250;</button>
+                  <button type="button" class="slider-btn prev" aria-label="Previous image">&#8249;</button>
+                  <button type="button" class="slider-btn next" aria-label="Next image">&#8250;</button>
                 </div>
                 <div class="project-info">
                   <h3>New Home Foundation &amp; Driveway Package</h3>
@@ -558,8 +155,8 @@
                       <span class="slide-tag">Trenches</span>
                     </div>
                   </div>
-                  <button type="button" class="slider-btn prev" onclick="slideProject(this, -1)" aria-label="Previous image">&#8249;</button>
-                  <button type="button" class="slider-btn next" onclick="slideProject(this, 1)" aria-label="Next image">&#8250;</button>
+                  <button type="button" class="slider-btn prev" aria-label="Previous image">&#8249;</button>
+                  <button type="button" class="slider-btn next" aria-label="Next image">&#8250;</button>
                 </div>
                 <div class="project-info">
                   <h3>New Construction Footing &amp; Trench Prep</h3>
@@ -580,8 +177,8 @@
                       <span class="slide-tag">Finished</span>
                     </div>
                   </div>
-                  <button type="button" class="slider-btn prev" onclick="slideProject(this, -1)" aria-label="Previous image">&#8249;</button>
-                  <button type="button" class="slider-btn next" onclick="slideProject(this, 1)" aria-label="Next image">&#8250;</button>
+                  <button type="button" class="slider-btn prev" aria-label="Previous image">&#8249;</button>
+                  <button type="button" class="slider-btn next" aria-label="Next image">&#8250;</button>
                 </div>
                 <div class="project-info">
                   <h3>Municipal Public Sidewalk Infrastructure</h3>
@@ -602,8 +199,8 @@
                       <span class="slide-tag">Angle B</span>
                     </div>
                   </div>
-                  <button type="button" class="slider-btn prev" onclick="slideProject(this, -1)" aria-label="Previous image">&#8249;</button>
-                  <button type="button" class="slider-btn next" onclick="slideProject(this, 1)" aria-label="Next image">&#8250;</button>
+                  <button type="button" class="slider-btn prev" aria-label="Previous image">&#8249;</button>
+                  <button type="button" class="slider-btn next" aria-label="Next image">&#8250;</button>
                 </div>
                 <div class="project-info">
                   <h3>Heavy-Duty Development Access Roads</h3>
@@ -623,7 +220,7 @@
         <h2>Contractors and companies we work with</h2>
         <p class="section-intro">Builders, suppliers and property managers across South Jersey who call JLP Concrete back job after job.</p>
         <div class="carousel">
-          <button type="button" class="carousel-btn" onclick="scrollPartners(-1)" aria-label="Scroll partners left">&lt;</button>
+          <button type="button" class="carousel-btn" data-partner-dir="-1" aria-label="Scroll partners left">&lt;</button>
 
           <!-- EDIT: One <li> per company. Copy a line to add one, delete a line to remove one. -->
           <ul class="partner-track" id="partnerTrack" tabindex="0" aria-label="Companies we work with">
@@ -634,7 +231,7 @@
             <li class="partner-badge">Vansant Environmental LLC</li>
           </ul>
 
-          <button type="button" class="carousel-btn" onclick="scrollPartners(1)" aria-label="Scroll partners right">&gt;</button>
+          <button type="button" class="carousel-btn" data-partner-dir="1" aria-label="Scroll partners right">&gt;</button>
         </div>
       </div>
     </section>
@@ -647,30 +244,49 @@
         <div class="contact-grid">
 
           <!--
-            FORM SETUP: This form is static and will not send anything yet.
-            To make it work, replace action="#" with your form service URL
-            (for example Formspree, Basin or Netlify Forms), or ask your web host.
+            CONTACT FORM (sends through Formspree, endpoint https://formspree.io/f/mbggakpq)
+            GitHub Pages cannot receive form posts itself, so Formspree receives them and
+            emails you each request. The small script near the bottom of this file connects
+            this form to Formspree. The data-fs-... labels tell that script which element is which:
+              data-fs-field       an input that gets marked if it has an error
+              data-fs-error       where an error message appears
+              data-fs-success     where the "thank you" message appears
+              data-fs-submit-btn  the button, disabled while sending
+            The action="..." below is a backup that still works if JavaScript is turned off.
           -->
-          <form action="#" method="post">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" autocomplete="name" required>
+          <div class="form-wrap">
+            <form id="contactForm" action="https://formspree.io/f/mbggakpq" method="POST">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" autocomplete="name" required data-fs-field>
+              <span class="fs-error" data-fs-error="name"></span>
 
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" autocomplete="email" required>
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" required data-fs-field>
+              <span class="fs-error" data-fs-error="email"></span>
 
-            <label for="phone">Phone</label>
-            <input type="tel" id="phone" name="phone" autocomplete="tel">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" autocomplete="tel" data-fs-field>
+              <span class="fs-error" data-fs-error="phone"></span>
 
-            <label for="details">Project details</label>
-            <textarea id="details" name="details" placeholder="Type of work, address, size, and when you would like to start"></textarea>
+              <label for="details">Project details</label>
+              <textarea id="details" name="details" placeholder="Type of work, address, size, and when you would like to start" data-fs-field></textarea>
+              <span class="fs-error" data-fs-error="details"></span>
 
-            <button type="submit" class="btn">Send request</button>
-          </form>
+              <!-- Hidden trap field: real visitors never see it, spam bots fill it in and get ignored -->
+              <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+              <button type="submit" class="btn" data-fs-submit-btn>Send request</button>
+            </form>
+
+            <!-- Messages shown after sending (Formspree script fills these in) -->
+            <div class="form-status ok" data-fs-success></div>
+            <div class="form-status error" data-fs-error></div>
+          </div>
 
           <!-- EDIT: Your real contact details -->
           <ul class="contact-info">
-            <li><strong>Phone</strong><a href="tel:+18565752911">(856) 575-2911</a></li>
-            <li><strong>Email</strong><a href="mailto:jpconcrete190@outlook.com">jpconcrete190@outlook.com</a></li>
+            <li><strong>Phone</strong><a href="tel:+18565550123">(856) 555-0123</a></li>
+            <li><strong>Email</strong><a href="mailto:info@jlpconcrete.com">info@jlpconcrete.com</a></li>
             <li><strong>Service area</strong>South Jersey concrete contractors proudly serving Atlantic, Gloucester, Camden, Cumberland, Cape May, Burlington, and Salem counties, including Egg Harbor, Glassboro, and surrounding areas.</li>
             <li><strong>Hours</strong>Mon to Fri, 7 am to 5 pm</li>
           </ul>
@@ -691,78 +307,38 @@
   </footer>
 
   <!--
-    PORTFOLIO PHOTO SLIDERS
-    Each < or > button slides its own card between that card's images.
-    Add more <div class="slide"> blocks in a card and this still works.
+    PHOTO VIEWER (lightbox). Opens when a portfolio photo is clicked.
+    Controlled entirely by script.js. It starts hidden.
   -->
-  <script>
-    function slideProject(button, direction) {
-      var slider = button.closest(".slider");
-      var slides = slider.querySelector(".slides");
-      var count = slides.children.length;
-      var index = (Number(slider.dataset.index) + direction + count) % count;   // wraps around
-      slider.dataset.index = index;
-      slides.style.transform = "translateX(-" + (index * 100) + "%)";
-    }
-  </script>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project photo viewer" hidden>
+    <div class="lb-stage">
+      <img class="lb-img" alt="" draggable="false">
+    </div>
+    <button type="button" class="lb-btn lb-close" aria-label="Close photo viewer">&times;</button>
+    <button type="button" class="lb-btn lb-prev" aria-label="Previous photo">&#8249;</button>
+    <button type="button" class="lb-btn lb-next" aria-label="Next photo">&#8250;</button>
+    <div class="lb-bar">
+      <span class="lb-caption"></span>
+      <span class="lb-count"></span>
+      <span class="lb-zoom">
+        <button type="button" class="lb-btn lb-mini lb-zoom-out" aria-label="Zoom out">&minus;</button>
+        <button type="button" class="lb-btn lb-mini lb-zoom-in" aria-label="Zoom in">+</button>
+      </span>
+    </div>
+  </div>
 
   <!--
-    PARTNER CAROUSEL ARROWS
-    Scrolls the partner row left (-1) or right (1) by most of its visible width.
+    FORMSPREE (contact form). Connects the form with id="contactForm" to your Formspree form.
+    To point at a different Formspree form later, change the formId below.
   -->
   <script>
-    function scrollPartners(direction) {
-      var track = document.getElementById("partnerTrack");
-      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      track.scrollBy({
-        left: direction * track.clientWidth * 0.8,
-        behavior: reduce ? "auto" : "smooth"
-      });
-    }
+    window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+    formspree('initForm', { formElement: '#contactForm', formId: 'mbggakpq' });
   </script>
+  <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 
-  <!--
-    HEADER AUTO-HIDE (the only JavaScript on the page)
-    Scroll down: the header slides up out of view.
-    Scroll up even slightly: it slides back down.
-    If JavaScript is off, the header simply stays visible.
-  -->
-  <script>
-    (function () {
-      var header = document.querySelector(".site-header");
-      var lastY = window.pageYOffset;   // scroll position at the last check
-      var waiting = false;              // limits work to once per screen refresh
-      var MIN_MOVE = 4;                 // pixels of scrolling to ignore (stops jitter)
-
-      function update() {
-        var y = Math.max(window.pageYOffset, 0);
-
-        // Always show the header at the very top of the page
-        if (y <= header.offsetHeight) {
-          header.classList.remove("is-hidden");
-        } else if (y > lastY + MIN_MOVE) {
-          header.classList.add("is-hidden");      // scrolling down: hide
-        } else if (y < lastY - MIN_MOVE) {
-          header.classList.remove("is-hidden");   // scrolling up: show
-        }
-
-        if (Math.abs(y - lastY) > MIN_MOVE) { lastY = y; }
-        waiting = false;
-      }
-
-      window.addEventListener("scroll", function () {
-        if (!waiting) {
-          waiting = true;
-          window.requestAnimationFrame(update);
-        }
-      }, { passive: true });
-
-      // Keyboard users tabbing into the menu always see it
-      header.addEventListener("focusin", function () {
-        header.classList.remove("is-hidden");
-      });
-    })();
-  </script>
+  <!-- All behavior lives in script.js ("defer" runs it after the page is built) -->
+  <script src="script.js" defer></script>
 
 </body>
 </html>

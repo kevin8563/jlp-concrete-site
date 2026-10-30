@@ -527,7 +527,9 @@ body.lb-open { overflow: hidden; }          /* page stays still behind the viewe
 /* ==========================================================
    18. CONTACT FORM MESSAGES
    ========================================================== */
-.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }   /* spam trap, invisible */
+/* Spam trap field. display: none matters: browser autofill skips fully hidden fields,
+   but it fills fields that are merely moved off-screen, which sent real requests to Spam. */
+.hp { display: none; }
 .form-status { margin: 14px 0 0; font-weight: 600; }
 .form-status:empty { display: none; }                  /* no empty gap before a message appears */
 .form-status.ok { color: #9be3b4; }                    /* light green: sits on the dark contact background */
